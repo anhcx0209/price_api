@@ -16,22 +16,9 @@ searcherRoutes.route('/').get(function (req, res) {
   if (!req.query.kw) {
     console.log("Must provide keyword");
   }
-
-  Product.aggregate([{
-    $match: {
-      $and: [{
-        source: req.query.sr
-      }, {
-        name: { $regex: req.query.kw, $options: 'i'}
-      }]
-    }
-  }, {
-    $project: {
-      name: 1,
-      price: 1,
-      source: 1
-    }
-  }]).limit(100).exec(function (err, items) {
+  Product.find({$text : {$search: req.query.kw}, source: req.query.sr}, 
+    { score: { $meta: "textScore" } }
+  ).sort( { score: { $meta: "textScore" } } ).limit(100).exec(function (err, items) {
     if (err) {
       mess = "Fail when exec query";
       console.log(mess);

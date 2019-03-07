@@ -8,6 +8,6 @@ let productSchema = new Schema({
   properties: [String],
   time: String,
   source: String
-}, { collection: 'price_sample' });
+}, { collection: 'Gia_26_01_2019' });
 
 module.exports = mongoose.model('Product', productSchema);
